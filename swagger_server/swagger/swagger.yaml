@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Medinet Clinical API
+  description: Medinet Clinical API
+  contact:
+    name: Medinet
+    url: https://medinet.com.au
+  version: 0.1.0
+servers:
+- url: https://mediverse-api.medinet.net.au/
+  description: DEV Server
+security:
+- ApiKeyAuth: []
+paths:
+  /NER/parse:
+    post:
+      summary: Parses clinical text
+      description: Parses text to retrieve Named Entities
+      operationId: ner_parser
+      requestBody:
+        description: Optional description in *Markdown*
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NER_parse_body'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "{}"
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.default_controller
+components:
+  schemas:
+    NER_parse_body:
+      type: object
+      properties:
+        text:
+          type: string
+          example: "This is the case of a very pleasant 46-year-old Caucasian female\
+            \ with subarachnoid hemorrhage secondary to ruptured left posteroinferior\
+            \ cerebellar artery aneurysm, which was clipped. The patient last underwent\
+            \ a right frontal ventricular peritoneal shunt on 10/12/07. This resulted\
+            \ in relief of left chest pain, but the patient continued to complaint\
+            \ of persistent pain to the left shoulder and left elbow. She was seen\
+            \ in clinic on 12/11/07 during which time MRI of the left shoulder showed\
+            \ no evidence of rotator cuff tear. She did have a previous MRI of the\
+            \ cervical spine that did show an osteophyte on the left C6-C7 level.\
+            \ Based on this, negative MRI of the shoulder, the patient was recommended\
+            \ to have anterior cervical discectomy with anterior interbody fusion\
+            \ at C6-C7 level. Operation, expected outcome, risks, and benefits were\
+            \ discussed with her. Risks include, but not exclusive of bleeding and\
+            \ infection, bleeding could be soft tissue bleeding, which may compromise\
+            \ airway and may result in return to the operating room emergently for\
+            \ evacuation of said hematoma. There is also the possibility of bleeding\
+            \ into the epidural space, which can compress the spinal cord and result\
+            \ in weakness and numbness of all four extremities as well as impairment\
+            \ of bowel and bladder function. Should this occur, the patient understands\
+            \ that she needs to be brought emergently back to the operating room for\
+            \ evacuation of said hematoma. There is also the risk of infection, which\
+            \ can be superficial and can be managed with p.o. antibiotics."
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: apikey
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_ApiKeyAuth
+
